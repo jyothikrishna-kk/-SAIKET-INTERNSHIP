@@ -1,0 +1,173 @@
+<!--Task 4: Build a simple quiz application using
+JavaScript.
+Description:
+Create a quiz application using JavaScript
+with at least 3 multiple-choice questions.
+Add functionality to move to the next
+question and display the score at the end.
+Ensure users cannot proceed without
+selecting an answer by adding basic
+validation.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .quiz-container {
+            background-color: #ffffff;
+            width: 400px;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .options {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .options li {
+            margin-bottom: 10px;
+        }
+
+        .options label {
+            display: block;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container" id="quiz">
+        <h2 id="question">Question text</h2>
+        <div class="error" id="error-msg">Please select an answer before proceeding.</div>
+        <ul class="options">
+            <li><label><input type="radio" name="option" value="0"> <span id="opt0"></span></label></li>
+            <li><label><input type="radio" name="option" value="1"> <span id="opt1"></span></label></li>
+            <li><label><input type="radio" name="option" value="2"> <span id="opt2"></span></label></li>
+        </ul>
+        <button class="btn" id="next-btn" onclick="nextQuestion()">Next Question</button>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "1. What does HTML stand for?",
+                options: ["Hyper Text Markup Language", "High Text Machine Language", "Hyperlink Text Management Language"],
+                answer: 0
+            },
+            {
+                question: "2. Which CSS property changes text color?",
+                options: ["text-style", "color", "font-color"],
+                answer: 1
+            },
+            {
+                question: "3. What is the correct JavaScript syntax to write 'Hello World'?",
+                options: ["console.log('Hello World')", "print('Hello World')", "response.write('Hello World')"],
+                answer: 0
+            }
+        ];
+
+        let currentQuiz = 0;
+        let score = 0;
+
+        const questionEl = document.getElementById('question');
+        const opt0 = document.getElementById('opt0');
+        const opt1 = document.getElementById('opt1');
+        const opt2 = document.getElementById('opt2');
+        const errorMsg = document.getElementById('error-msg');
+
+        function loadQuiz() {
+            deselectOptions();
+            errorMsg.style.display = 'none';
+            const currentData = quizData[currentQuiz];
+            questionEl.innerText = currentData.question;
+            opt0.innerText = currentData.options[0];
+            opt1.innerText = currentData.options[1];
+            opt2.innerText = currentData.options[2];
+        }
+
+        function deselectOptions() {
+            const options = document.getElementsByName('option');
+            options.forEach(opt => opt.checked = false);
+        }
+
+        function getSelected() {
+            const options = document.getElementsByName('option');
+            let selected = null;
+            options.forEach(opt => {
+                if (opt.checked) {
+                    selected = parseInt(opt.value);
+                }
+            });
+            return selected;
+        }
+
+        function nextQuestion() {
+            const answer = getSelected();
+
+            if (answer === null) {
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            errorMsg.style.display = 'none';
+
+            if (answer === quizData[currentQuiz].answer) {
+                score++;
+            }
+
+            currentQuiz++;
+
+            if (currentQuiz < quizData.length) {
+                loadQuiz();
+            } else {
+                document.getElementById('quiz').innerHTML = `
+                    <h2>Quiz Completed</h2>
+                    <p>Your final score is: ${score} / ${quizData.length}</p>
+                    <button class="btn" onclick="location.reload()">Restart Quiz</button>
+                `;
+            }
+        }
+
+        loadQuiz();
+    </script>
+
+</body>
+</html>
