@@ -1,1 +1,146 @@
+<!--Task 5: Mini Project - To-Do List App
+Create a to-do list application using HTML, CSS, and JavaScript. Include features to
+add, edit, delete, and mark tasks as completed. Use CSS to style the app and make it responsive for different screen sizes.-->
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f9fc;
+            display: flex;
+            justify-content: center;
+            padding-top: 50px;
+            margin: 0;
+        }
+
+        .todo-app {
+            background-color: #ffffff;
+            width: 90%;
+            max-width: 450px;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+        }
+
+        .input-group button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 4px;
+        }
+
+        li.completed span {
+            text-decoration: line-through;
+            color: #888888;
+        }
+
+        .actions button {
+            margin-left: 4px;
+            padding: 5px 8px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .edit-btn { background-color: #ffc107; color: black; }
+        .delete-btn { background-color: #dc3545; color: white; }
+        .complete-btn { background-color: #17a2b8; color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="todo-app">
+        <h2>To-Do List</h2>
+        <div class="input-group">
+            <input type="text" id="task-input" placeholder="Add a new task...">
+            <button onclick="addTask()">Add</button>
+        </div>
+        <ul id="task-list"></ul>
+    </div>
+
+    <script>
+        const taskInput = document.getElementById('task-input');
+        const taskList = document.getElementById('task-list');
+
+        function addTask() {
+            const text = taskInput.value.trim();
+            if (text === '') return;
+
+            const li = document.createElement('li');
+
+            const span = document.createElement('span');
+            span.innerText = text;
+
+            const actions = document.createElement('div');
+            actions.className = 'actions';
+
+            const completeBtn = document.createElement('button');
+            completeBtn.innerText = 'Done';
+            completeBtn.className = 'complete-btn';
+            completeBtn.onclick = () => li.classList.toggle('completed');
+
+            const editBtn = document.createElement('button');
+            editBtn.innerText = 'Edit';
+            editBtn.className = 'edit-btn';
+            editBtn.onclick = () => {
+                const newText = prompt('Edit task:', span.innerText);
+                if (newText !== null && newText.trim() !== '') {
+                    span.innerText = newText.trim();
+                }
+            };
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.innerText = 'Delete';
+            deleteBtn.className = 'delete-btn';
+            deleteBtn.onclick = () => li.remove();
+
+            actions.appendChild(completeBtn);
+            actions.appendChild(editBtn);
+            actions.appendChild(deleteBtn);
+
+            li.appendChild(span);
+            li.appendChild(actions);
+
+            taskList.appendChild(li);
+            taskInput.value = '';
+        }
+    </script>
+
+</body>
+</html>
